@@ -1,0 +1,397 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Linux Server Monitoring DevOps portfolio project by Anandha Krishnan. Built using Docker, Prometheus, Grafana and Node Exporter.">
+  <meta name="theme-color" content="#0b1120">
+
+  <title>Linux Monitoring | Anandha Krishnan</title>
+
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #131f33;
+      --border: #263650;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --green: #34d399;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1100px, 92%);
+      margin: auto;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 0;
+      gap: 20px;
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .brand span { color: var(--accent); }
+
+    nav .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    nav a:hover { color: var(--accent); }
+
+    .hero {
+      padding: 105px 0 80px;
+      max-width: 850px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-size: 12px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 70px);
+      line-height: 1.1;
+      letter-spacing: -2px;
+      margin: 22px 0;
+    }
+
+    h1 span { color: var(--accent); }
+
+    .lead {
+      max-width: 680px;
+      font-size: 19px;
+      color: var(--muted);
+    }
+
+    .buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-block;
+      border-radius: 10px;
+      padding: 13px 22px;
+      font-weight: 700;
+      background: var(--accent);
+      color: #05101e;
+    }
+
+    .btn.outline {
+      color: var(--text);
+      background: transparent;
+      border: 1px solid var(--border);
+    }
+
+    section { padding: 55px 0; }
+
+    h2 {
+      font-size: clamp(26px, 4vw, 36px);
+      margin: 0 0 14px;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      margin-bottom: 30px;
+      max-width: 700px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 25px;
+      border-radius: 14px;
+    }
+
+    .card h3 { margin-top: 0; }
+
+    .card p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .number {
+      color: var(--accent);
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 7px 12px;
+      background: #1e293b;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      color: #cbd5e1;
+      margin: 5px;
+      font-size: 13px;
+    }
+
+    .architecture {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      text-align: center;
+    }
+
+    .service {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      padding: 25px;
+      border-radius: 12px;
+    }
+
+    .service strong { color: var(--accent); }
+
+    .service p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .screenshot {
+      width: 100%;
+      border-radius: 15px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    pre {
+      background: #020617;
+      padding: 22px;
+      border-radius: 12px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      color: #a5f3fc;
+    }
+
+    code { font-family: ui-monospace, monospace; }
+
+    footer {
+      margin-top: 50px;
+      border-top: 1px solid var(--border);
+      padding: 35px 0;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    footer a { color: var(--accent); }
+
+    @media (max-width: 750px) {
+      .grid, .architecture {
+        grid-template-columns: 1fr;
+      }
+
+      .hero { padding: 65px 0; }
+      nav { align-items: flex-start; }
+      nav .links { gap: 10px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <nav>
+      <a class="brand" href="#">KISIP<span> / DEVOPS</span></a>
+
+      <div class="links">
+        <a href="#about">About</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#setup">Setup</a>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <div class="eyebrow">
+        DEVOPS ENGINEERING PROJECT
+      </div>
+
+      <h1>
+        Linux Server<br>
+        <span>Monitoring.</span>
+      </h1>
+
+      <p class="lead">
+        A containerized infrastructure monitoring stack
+        built with Docker, Prometheus, Grafana and
+        Node Exporter. Designed to collect, store and
+        visualize Linux system metrics.
+      </p>
+
+      <div class="buttons">
+        <a class="btn"
+           href="https://github.com/anandhakrixnan/linux-server-monitoring"
+           target="_blank" rel="noopener noreferrer">
+          View GitHub Repository
+        </a>
+
+        <a class="btn outline" href="#dashboard">
+          View Dashboard
+        </a>
+      </div>
+    </header>
+
+    <section id="about">
+      <h2>Project Overview</h2>
+
+      <p class="section-intro">
+        A practical DevOps monitoring project demonstrating
+        container orchestration, metrics collection,
+        time-series storage and infrastructure observability.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="number">03</div>
+          <h3>Containers</h3>
+          <p>Prometheus, Grafana and Node Exporter.</p>
+        </div>
+
+        <div class="card">
+          <div class="number">15s</div>
+          <h3>Scrape Interval</h3>
+          <p>Automated collection of Linux metrics.</p>
+        </div>
+
+        <div class="card">
+          <div class="number">15d</div>
+          <h3>Data Retention</h3>
+          <p>Configured Prometheus metrics retention.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Technology Stack</h2>
+
+      <div>
+        <span class="pill">Docker</span>
+        <span class="pill">Docker Compose</span>
+        <span class="pill">Prometheus</span>
+        <span class="pill">Grafana</span>
+        <span class="pill">Node Exporter</span>
+        <span class="pill">Linux</span>
+        <span class="pill">PromQL</span>
+        <span class="pill">GitHub</span>
+      </div>
+    </section>
+
+    <section id="architecture">
+      <h2>System Architecture</h2>
+
+      <p class="section-intro">
+        Node Exporter exposes host metrics. Prometheus
+        scrapes and stores them. Grafana queries Prometheus
+        to generate dashboards.
+      </p>
+
+      <div class="architecture">
+        <div class="service">
+          <strong>01 / Node Exporter</strong>
+          <h3>Collect Metrics</h3>
+          <p>CPU, RAM, disk, network and uptime.</p>
+        </div>
+
+        <div class="service">
+          <strong>02 / Prometheus</strong>
+          <h3>Store Metrics</h3>
+          <p>Scrape targets and query time-series data.</p>
+        </div>
+
+        <div class="service">
+          <strong>03 / Grafana</strong>
+          <h3>Visualize</h3>
+          <p>Dashboards, graphs and system analysis.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="dashboard">
+      <h2>Monitoring Dashboard</h2>
+
+      <p class="section-intro">
+        Grafana dashboard showing Linux server performance.
+        This is a screenshot of the local monitoring stack,
+        not a public live connection.
+      </p>
+
+      <img
+        class="screenshot"
+        src="assets/dashboard.png"
+        alt="Grafana Linux server monitoring dashboard"
+        loading="lazy"
+      >
+    </section>
+
+    <section id="setup">
+      <h2>Run Locally</h2>
+
+      <p class="section-intro">
+        Clone the repository and start the monitoring
+        services using Docker Compose.
+      </p>
+
+      <pre><code>git clone git@github.com:anandhakrixnan/linux-server-monitoring.git
+cd linux-server-monitoring
+cp .env.example .env
+
+# Configure the Grafana password in .env
+nano .env
+
+docker compose up -d
+docker compose ps</code></pre>
+
+      <p>
+        Grafana: <code>localhost:3000</code><br>
+        Prometheus: <code>localhost:9090</code>
+      </p>
+    </section>
+
+    <footer>
+      <p>Built by <strong>Anandha Krishnan</strong></p>
+      <p>Junior DevOps Engineer | Linux | Cloud | Automation</p>
+      <a href="https://github.com/anandhakrixnan"
+         target="_blank" rel="noopener noreferrer">
+        GitHub Profile
+      </a>
+    </footer>
+  </div>
+</body>
+</html>
